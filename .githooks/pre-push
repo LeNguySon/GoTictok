@@ -1,0 +1,3 @@
+#!/bin/sh
+# ECC gate, full profile. All logic lives in tools/eccgate: do not add checks here.
+exec go run ./tools/eccgate pre-push

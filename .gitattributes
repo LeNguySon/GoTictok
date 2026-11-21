@@ -1,0 +1,8 @@
+# LF everywhere, in the repository and in every working copy, so hooks, Go
+# sources and config behave the same on Windows, macOS and Linux.
+* text=auto eol=lf
+
+# The committed knowledge graph is rewritten whole on every build: merge it
+# with Graphify's union driver (registered by `go run ./tools/eccgate setup`)
+# and keep it out of diffs.
+graphify-out/graph.json merge=graphify linguist-generated=true -diff

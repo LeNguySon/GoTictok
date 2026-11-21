@@ -1,0 +1,174 @@
+# golangci-lint v2 configuration.
+#
+# Every linter here enforces a rule from the ECC rule set vendored under
+# .claude/rules/ecc/ or from the project's own rules in .claude/rules/project/
+# (see AGENTS.md for the rule -> check mapping).
+# This file is part of the gate: changing it needs human approval.
+version: "2"
+
+run:
+  timeout: 5m
+  tests: true
+
+linters:
+  default: standard # errcheck, govet, ineffassign, staticcheck, unused
+  enable:
+    # Error handling (go-reviewer: CRITICAL; golang/coding-style)
+    - errorlint # errors.Is / errors.As, %w wrapping
+    - errname # sentinel errors are ErrX, error types are XError
+    - nilerr # no `return nil` after checking err != nil
+    - nilnil # no (nil, nil) returns that hide "not found"
+    - wrapcheck # errors from other packages are wrapped with context
+    # Context and I/O (golang/security: Context & Timeouts)
+    - bodyclose
+    - containedctx # no context stored in a struct
+    - contextcheck # context is propagated
+    - fatcontext # no context grown inside a loop
+    - noctx # no context-less I/O
+    - rowserrcheck
+    - sqlclosecheck
+    # State and control flow (go-reviewer: HIGH)
+    - gochecknoglobals # no mutable package-level state
+    - gochecknoinits # explicit initialisation, no init()
+    - exhaustive # switches over enums cover every value
+    - reassign # package variables of other packages are not reassigned
+    # Size and shape (common/coding-style)
+    - dupl # no copy-pasted blocks
+    - funlen # functions under 50 lines
+    - gocyclo
+    - interfacebloat # small interfaces
+    - ireturn # accept interfaces, return structs
+    - mnd # named constants instead of magic numbers
+    - nakedret
+    - nestif # no deep nesting
+    # Security and supply chain (golang/security)
+    - bidichk # no invisible bidirectional Unicode in source
+    - depguard # no deprecated or superseded packages
+    - gocheckcompilerdirectives
+    - gomoddirectives # no local replace directives
+    - gosec
+    - nosprintfhostport
+    # Correctness
+    - asasalint
+    - copyloopvar
+    - durationcheck
+    - errchkjson
+    - gocritic
+    - makezero
+    - musttag # marshalled structs carry explicit field tags
+    - predeclared
+    - recvcheck
+    - unconvert
+    - unparam
+    - wastedassign
+    # Hygiene
+    - forbidigo # no leftover debug printing (common/code-review)
+    - misspell
+    - nolintlint # every suppression is specific and explained
+    - prealloc
+    - revive
+    - sloglint # log/slog used consistently
+    - tparallel
+    - usestdlibvars
+    - usetesting
+  settings:
+    depguard:
+      rules:
+        main:
+          deny:
+            - pkg: io/ioutil
+              desc: deprecated since Go 1.16, use io and os
+            - pkg: github.com/pkg/errors
+              desc: use the standard errors package and fmt.Errorf with %w
+            - pkg: golang.org/x/net/context
+              desc: use the standard context package
+    dupl:
+      threshold: 150
+    errcheck:
+      check-blank: true # `_ = f()` is an ignored error (go-reviewer: CRITICAL)
+      check-type-assertions: true
+    exhaustive:
+      default-signifies-exhaustive: true
+    funlen:
+      lines: 50
+      statements: -1
+      ignore-comments: true
+    gocyclo:
+      min-complexity: 15
+    interfacebloat:
+      max: 5
+    mnd:
+      # File permission literals are self-describing.
+      ignored-numbers: ["0o600", "0o640", "0o644", "0o700", "0o750", "0o755"]
+    nakedret:
+      max-func-lines: 0
+    nestif:
+      min-complexity: 5
+    nolintlint:
+      require-explanation: true
+      require-specific: true
+      allow-unused: false
+    revive:
+      rules:
+        - name: file-length-limit # files under 800 lines (common/coding-style)
+          arguments:
+            - max: 800
+              skipComments: true
+              skipBlankLines: true
+        - name: max-control-nesting # nesting no deeper than 4 levels
+          arguments: [4]
+        - name: argument-limit
+          arguments: [5]
+        - name: function-result-limit
+          arguments: [3]
+        - name: deep-exit # os.Exit and log.Fatal only in main
+        - name: context-as-argument # ctx is the first parameter
+        - name: context-keys-type
+        - name: defer # no deferred calls in loops
+        - name: early-return
+        - name: error-naming
+        - name: error-return
+        - name: error-strings # lowercase, no trailing punctuation
+        - name: errorf
+        - name: exported # exported identifiers are documented
+        - name: indent-error-flow
+        - name: package-comments
+        - name: unused-parameter
+        - name: var-naming
+        - name: receiver-naming
+        - name: superfluous-else
+        - name: unreachable-code
+        - name: redefines-builtin-id
+        - name: use-any
+        - name: bare-return
+        - name: datarace
+        - name: atomic
+        - name: waitgroup-by-value
+        - name: modifies-value-receiver
+        - name: string-of-int
+        - name: time-naming
+        - name: unexported-return
+        - name: blank-imports
+        - name: dot-imports
+        - name: empty-block
+        - name: identical-branches
+        - name: unconditional-recursion
+        - name: constant-logical-expr
+  exclusions:
+    rules:
+      # Table-driven tests are long and repetitive by design; ECC exempts test
+      # files from the size ceilings (common/coding-style: "Test ... files may
+      # exceed").
+      - path: _test\.go
+        linters: [funlen, gochecknoglobals, wrapcheck, noctx, dupl, mnd]
+      - path: _test\.go
+        text: file-length-limit
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    goimports:
+      local-prefixes:
+        - gotictok

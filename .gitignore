@@ -1,0 +1,25 @@
+# Build output
+/bin/
+*.exe
+*.test
+*.out
+
+# Pinned gate tools and the coverage profile.
+# Rebuilt by: go run ./tools/eccgate setup
+/.tools/
+
+# Per-developer agent settings
+.claude/settings.local.json
+
+# Secrets never belong in the repository
+.env
+.env.*
+!.env.example
+
+# Graphify: only the graph itself is shared (team workflow); the report, the
+# HTML view and the caches are rebuilt locally by `graphify update .`
+graphify-out/*
+!graphify-out/graph.json
+
+# Backups written by `graphify install` when it merges its hooks
+*.graphify-bak

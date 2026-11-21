@@ -1,0 +1,3 @@
+#!/bin/sh
+# ECC gate: commit message format. All logic lives in tools/eccgate.
+exec go run ./tools/eccgate commit-msg "$1"

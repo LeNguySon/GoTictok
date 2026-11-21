@@ -1,0 +1,11 @@
+# Keep the knowledge graph about the product code, not about agent tooling.
+.tools/
+.claude/
+.agents/
+.cursor/
+.github/
+.githooks/
+graphify-out/
+.codex/
+.gemini/
+.copilot/

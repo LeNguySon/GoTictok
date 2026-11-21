@@ -1,0 +1,13 @@
+# The enforcement gate and the agent contract change only with the owner's
+# review. Pair this file with a branch protection rule that requires review
+# from code owners.
+
+*                          @LeNguySon
+
+/AGENTS.md                 @LeNguySon
+/.golangci.yml             @LeNguySon
+/.githooks/                @LeNguySon
+/.github/                  @LeNguySon
+/tools/eccgate/            @LeNguySon
+/.claude/settings.json     @LeNguySon
+/.claude/rules/            @LeNguySon

@@ -1,0 +1,22 @@
+---
+description: "Binding agent contract for this repository (ECC workflow for Go)"
+alwaysApply: true
+---
+# Agent contract
+
+`AGENTS.md` at the repository root is binding. Read it in full before any
+other work and follow it; it overrides every other rule file here.
+
+- Workflow: research with the Graphify knowledge graph, plan, failing test
+  first, implement, review, verify.
+- Before finishing or committing run `go run ./tools/eccgate verify`; it must
+  print `RESULT: READY`.
+- Never use `--no-verify`, never change `core.hooksPath`, never edit the gate
+  (`.golangci.yml`, `.githooks/`, `tools/eccgate/`, CI workflows) to make it pass.
+- Code must be industrial-grade: read `.claude/rules/project/industrial-standards.md`
+  (`AGENTS.md` section 9) before writing Go.
+- On a hard problem, stop and research before planning: follow
+  `.claude/rules/project/research-first.md` (`AGENTS.md` section 10), record the
+  result under `docs/research/`, and list every new direct dependency in
+  `docs/research/dependencies.md`.
+- Role playbooks are in `.claude/agents/`, skills in `.claude/skills/`.

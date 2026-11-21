@@ -1,0 +1,15 @@
+#!/bin/sh
+# ECC gate, quick profile. All checks live in tools/eccgate: do not add checks here.
+go run ./tools/eccgate pre-commit || exit 1
+
+# Graphify team workflow: the committed knowledge graph is refreshed and staged
+# together with the code it describes. This is advisory, so a missing or
+# failing graphify never blocks a commit.
+if command -v graphify >/dev/null 2>&1; then
+	if graphify update . >/dev/null 2>&1; then
+		git add graphify-out/graph.json
+	else
+		echo "graphify: graph not refreshed (run: graphify update .)" >&2
+	fi
+fi
+exit 0
