@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0 # commit subjects of the whole pull request are checked
 
@@ -30,7 +30,7 @@ jobs:
           go-version-file: go.mod
 
       - name: Cache pinned tools
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: .tools/bin
           key: ecc-tools-${{ runner.os }}-${{ hashFiles('tools/eccgate/setup.go', 'go.mod') }}
