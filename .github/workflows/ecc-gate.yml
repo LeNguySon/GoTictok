@@ -30,7 +30,7 @@ jobs:
           go-version-file: go.mod
 
       - name: Cache pinned tools
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: .tools/bin
           key: ecc-tools-${{ runner.os }}-${{ hashFiles('tools/eccgate/setup.go', 'go.mod') }}
